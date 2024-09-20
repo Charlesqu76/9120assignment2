@@ -1,0 +1,55 @@
+{% include 'top.html' %}
+
+<div class="content">
+    <div class="container">
+        <h1 class="title" align="center">Admissions</h1>
+        <div class="search">
+            <form class="search-top" method="POST" action="{{url_for('list_admission')}}">
+                <input type="text" name="search" placeholder="Search admissions" autofocus>
+                <button class="flat" type="submit">Find</button>
+                <div class="clear"></div>
+            </form>
+        </div>
+        <table class="styled">
+            <thead>
+                <tr>
+				    <th>ID</th>
+                    <th>Type</th>
+                    <th>Department</th>
+                    <th>Discharge Date</th>
+					<th>Fee</th>
+                    <th>Patient</th>
+                    <th>Condition</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for i in admissionlist %}
+                    <tr class='clickable-row' data-href="{{url_for('update_admission', admission_id=i.admission_id, type=i.admission_type, department=i.admission_department, discharge_date=i.discharge_date, fee=i.fee, patient=i.patient, condition=i.condition)}}" method="GET">
+					    <td>{{ i.admission_id }}</td>
+                        <td>{{ i.admission_type }}</td>
+                        <td>{{ i.admission_department }}</td>
+                        <td>{{ i.discharge_date }}</td>
+                        <td>{{ i.fee }}</td>
+						<td>{{ i.patient }}</td>
+                        <td>{{ i.condition }}</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" defer="defer"> jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+	$(".clickable-row").mouseover(function() {
+        $(this).css('background-color', '#eeeeee');
+    });
+	$(".clickable-row").mouseout(function() {
+        $(this).css('background-color', 'white');
+    });
+
+});
+</script>
+
+{% include 'bottom.html' %}

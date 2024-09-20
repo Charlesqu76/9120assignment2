@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Central Sydney Hospital</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pure.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/grid.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <script src="{{ url_for('static', filename='scripts/jquery.js') }}"></script>
+    </head>
+    <body>
+        <div class="body-container">
+            <header class="page-header">
+                <div class="container">
+                    <div class="title">
+                        <a href="/"><span class="inner">The Central Sydney Hospital</span></a>
+                    </div>
+                    <ul class="page-nav">
+                        {% if session.logged_in %}
+                        <li><button class="button button19"><a href="{{ url_for('list_admission')}}">Admissions</a></button></li>
+                        <li><button class="button button20"><a href="{{ url_for('new_admission')}}">Add Admission</a></button></li>
+                        <li><button class="button button19"><a href="{{ url_for('logout') }}">Logout</a></button></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </header>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% if page.bar == True %}
+                <ul class="flashes" style="background-color: LightGray; color:Black">
+                {% else %}
+                <ul class="flashes" style="background-color: #B00">
+                {% endif %}
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}

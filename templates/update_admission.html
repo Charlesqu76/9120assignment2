@@ -1,0 +1,41 @@
+{% include 'top.html' %}
+
+<div class="content">
+    <div class="container">
+        <h1 class="title" align="center">Update Admission</h1>
+
+        <form class="newbooking pure-form pure-form-aligned" method="POST" action="{{url_for('update_admission')}}">
+			<div class="pure-control-group">
+                <label for="admission_id">ID:</label>
+                <input type="text" name="admission_id" value="{{ admissionInfo.admission_id }}" size="25" readonly required>
+            </div>
+            <div class="pure-control-group">
+                <label for="name">Type:</label>
+                <input type="text" name="type" value= "{{ admissionInfo.type }}" size="25" autofocus required>
+            </div>
+			<div class="pure-control-group">
+                <label for="department">Department:</label>
+				<input type="text" name="department" value="{{ admissionInfo.department }}" size="25">
+            </div>
+			<div class="pure-control-group">
+                <label for="discharge_date">Discharge Date:</label>
+				<input type="date" name="discharge_date" value="{{ admissionInfo.discharge_date }}" size="25">
+            </div>
+			<div class="pure-control-group">
+                <label for="fee">Fee:</label>
+                <input type="text" name="fee" value="{{ admissionInfo.fee }}" size="25">
+			</div>
+            <div class="pure-control-group">
+                <label for="patient">Patient:</label>
+                <input type="text" name="patient" value="{{ admissionInfo.patient }}" size="25">
+			</div>
+            <div class="pure-control-group">
+                <label for="condition">Condition:</label>
+				<textarea name="condition" rows="5" cols="32">{{ admissionInfo.condition }}</textarea>
+            </div>
+            <button type="submit" class="flat">Update Admission</button>
+        </form>
+    </div>
+</div>
+
+{% include 'bottom.html' %}

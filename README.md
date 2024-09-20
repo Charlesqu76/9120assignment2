@@ -5,3 +5,5 @@ This is the README file for the 9210 assignment.
 > Psycopg2 to communicate with PostgreSQL database
 
 
+
+

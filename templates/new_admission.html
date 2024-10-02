@@ -1,0 +1,29 @@
+{% include 'top.html' %}
+
+<div class="content">
+    <div class="container">
+        <h1 class="title" align="center">New Admission</h1>
+
+        <form class="newbooking pure-form pure-form-aligned" method="POST" action="{{url_for('new_admission')}}">
+            <div class="pure-control-group">
+                <label for="type">Type:</label>
+                <input type="text" name="type" size="25" autofocus>
+            </div>
+            <div class="pure-control-group">
+                <label for="department">Department:</label>
+                <input type="text" name="department" size="25">
+            </div>
+            <div class="pure-control-group">
+                <label for="patient">Patient:</label>
+                <input type="text" name="patient" size="25">
+            </div>
+            <div class="pure-control-group">
+                <label for="condition">Condition:</label>
+                <textarea name="condition" rows="5" cols="32"></textarea>
+            </div>
+            <button type="submit" class="flat">Add Admission</button>
+        </form>
+    </div>
+</div>
+
+{% include 'bottom.html' %}

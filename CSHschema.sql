@@ -89,3 +89,33 @@ INSERT INTO Admission (AdmissionType, Department, Fee, Patient, Administrator, D
 	(4, 1, 75.00, 'gthomas', 'bbrown', '19/11/2023', 'Routine general practitioner consultation for a follow-up after a recent bout of seasonal allergies.'),
 	(3, 3, 7000.50, 'smartinez', 'jdoe', '15/10/2024', NULL),
 	(1, 2, NULL, 'etylor', 'jdoe', NULL, 'I am having intense, crushing pain in my chest that feels like an elephant is sitting on it. It is spreading to my left arm and neck.');
+
+-- Create the stored function to find the associated admission list of the adminstrator.
+CREATE OR REPLACE FUNCTION findAdmissionsByadmin(Login_name VARCHAR)
+RETURNS table(
+    Admission_id INT,
+    Admission_type VARCHAR(20),
+    Admission_department VARCHAR(20),
+    Discharge_date Date,
+    Fee Decimal(7, 2),
+    Patient TEXT,
+    Condition VARCHAR(500)
+) AS $$
+BEGIN 
+    REtURN QUERY
+    SELECT ad.AdmissionID as "ID", admit.AdmissionTypeName as "Type", 
+           dept.DeptName as "Department", ad.DischargeDate as "Discharge Date", 
+           ad.Fee as "Fee", concat(pt.FirstName, ' ', pt.LastName) as "Patient", 
+           ad.Condition as "Condition"
+    FROM Admission ad 
+         INNER JOIN AdmissionType admit ON(ad.AdmissionType = admit.AdmissionTypeID) 
+         INNER JOIN Department dept ON(ad.department = dept.DeptId)
+         INNER JOIN Patient pt ON(ad.Patient = pt.PatientID)
+         INNER JOIN Administrator admini ON(ad.Administrator = admini.UserName)
+    WHERE ad.Administrator = Login_name
+    ORDER BY ad.DischargeDate DESC NULLS LAST, pt.FirstName ASC, 
+             pt.LastName ASC, admit.AdmissionTypeName DESC; 
+END;
+$$ LANGUAGE plpgsql; 
+
+

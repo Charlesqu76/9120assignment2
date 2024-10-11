@@ -4,6 +4,10 @@ DROP TABLE IF EXISTS AdmissionType;
 DROP TABLE IF EXISTS Department;
 DROP TABLE IF EXISTS Admission;
 
+
+-- del 
+SET DateStyle = 'DMY';
+
 CREATE TABLE Administrator (
     UserName VARCHAR(10) PRIMARY KEY,
     Password VARCHAR(20) NOT NULL,
@@ -119,3 +123,78 @@ END;
 $$ LANGUAGE plpgsql; 
 
 
+
+CREATE OR REPLACE FUNCTION findadmissionsbycriteria("searchstring" varchar)
+  RETURNS TABLE("admission_id" int4, "admission_type" varchar, "admission_department" varchar, "discharge_date" date, "fee" numeric, "patient" text, "condition" varchar) AS $BODY$
+	DECLARE
+   _searchstring varchar := ('%' ||searchstring|| '%');
+	BEGIN
+	RETURN QUERY
+  SELECT A.admissionid AS admission_id,
+	AT.AdmissionTypeName AS admission_type,
+	D.DeptName AS admission_department,
+	A.DischargeDate AS discharge_date,
+	A.Fee AS fee,
+	P.FirstName || P.LastName AS patient,
+	A.CONDITION AS condition 
+FROM
+	Admission
+	AS A LEFT JOIN AdmissionType AS AT ON A.AdmissionType = AT.AdmissionTypeID
+	LEFT JOIN Department AS D ON A.Department = D.DeptId
+	LEFT JOIN Patient AS P ON A.Patient = P.PatientID 
+WHERE
+	(
+		LOWER ( A.CONDITION ) LIKE LOWER ( _searchstring ) 
+		OR LOWER ( AT.AdmissionTypeName ) LIKE LOWER ( _searchstring ) 
+		OR LOWER ( D.DeptName ) LIKE LOWER ( _searchstring ) 
+		OR LOWER ( P.FirstName ) LIKE LOWER ( _searchstring ) 
+		OR LOWER ( P.LastName ) LIKE LOWER ( _searchstring ) 
+	) 
+	AND ( A.DischargeDate IS NULL OR A.DischargeDate >= CURRENT_DATE - INTERVAL '2 years' ) 
+ORDER BY
+	A.DischargeDate IS NOT NULL,
+	A.DischargeDate,
+	P.FirstName,
+	P.LastName;
+
+END
+$BODY$
+  LANGUAGE plpgsql;
+
+
+
+
+
+  CREATE OR REPLACE FUNCTION addAdmission("type_" varchar, "department_" varchar, "patient_" varchar, "condition_" varchar, "admin_" varchar)
+  RETURNS BOOL AS $BODY$
+	DECLARE
+		type_id INT;
+		department_id INT;
+		patient_id VARCHAR;
+		
+	BEGIN
+	
+SELECT AdmissionTypeID INTO type_id FROM AdmissionType WHERE LOWER(type_) = LOWER(AdmissionTypeName);
+	IF  type_id IS NULL 
+	THEN RETURN FALSE;
+	END IF;
+	
+	
+ SELECT DeptId INTO department_id FROM Department WHERE LOWER(department_) = LOWER(DeptName);
+	IF  department_id IS NULL
+	THEN RETURN FALSE;
+	END IF;
+	
+	SELECT PatientID INTO patient_id FROM Patient WHERE  LOWER(PatientID) = LOWER(patient_);
+	IF  patient_id IS NULL
+	THEN RETURN FALSE;
+	END IF;
+	
+	INSERT INTO Admission(AdmissionType, Department,Patient ,Administrator, Condition) 
+	VALUES (type_id, department_id, patient_id,admin_, condition_ );
+	
+	RETURN TRUE;
+		
+END
+$BODY$
+  LANGUAGE plpgsql;

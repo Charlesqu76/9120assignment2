@@ -15,7 +15,7 @@ def openConnection():
     userid = "y24s2c9120_xihe0498"
     passwd = "Hxy5463060432&"
     myHost = "awsprddbs4836.shared.sydney.edu.au"
-123
+
     # Create a connection to the database
     conn = None
     try:

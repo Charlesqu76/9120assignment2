@@ -20,11 +20,16 @@ def openConnection():
     conn = None
     try:
         # Parses the config file and connects using the connect string
+        """
         conn = psycopg2.connect(database=userid,
                                     user=userid,
                                     password=passwd,
                                     host=myHost)
-
+        """
+        conn = psycopg2.connect(database='9120',
+                                user='charles',
+                                password='charles',
+                                host='43.134.49.254')
 
     except psycopg2.Error as sqle:
         print("psycopg2.Error : " + sqle.pgerror)
@@ -148,5 +153,37 @@ def addAdmission(type_, department_, patient_, condition, admin):
 Update an existing admission
 '''
 def updateAdmission(id, type, department, dischargeDate, fee, patient, condition):
+    try:
+        conn = openConnection()
+        cursor = conn.cursor
 
+        SQL_query = """
+        UPDATE Admission
+        SET
+            AdmissionType = (SELECT AdmissionTypeID FROM AdmissionType WHERE LOWER(AdmissionTypeName) = LOWER(%s),
+            Department = (SELECT DeptID FROM Department WHERE LOWER(DeptNAME) = LOWER(%s)),
+            DischargeDate = %s,
+            Fee = %s,
+            Patient = %s,
+            Condition = %s
+        WHERE AdmissionID = %s
+        """
+
+        cursor.execute(SQL_query, (type, department, discharge_date, fee, patient, condition, admission_id))
+
+        conn.commit()
+
+        if cursor.rowcount > 0:
+            print(f"Admission record with ID {admission_id} updated successfully.")
+            return True
+        else:
+            print(f"No admission record found with ID {admission_id}.")
+            return False
+
+    except Exception as e:
+        print(f"Error during admission update: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
     return

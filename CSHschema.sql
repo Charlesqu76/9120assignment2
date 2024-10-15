@@ -135,7 +135,7 @@ CREATE OR REPLACE FUNCTION findadmissionsbycriteria("searchstring" varchar)
 	D.DeptName AS admission_department,
 	COALESCE(TO_CHAR(A.DischargeDate, 'DD-MM-YYYY'), '') AS discharge_date,
 	COALESCE(A.Fee::varchar, '') AS fee,
-	P.FirstName || P.LastName AS patient,
+	P.FirstName ||' ' || P.LastName AS patient,
 	COALESCE(A.CONDITION, '') AS condition 
 FROM
 	Admission
@@ -160,7 +160,6 @@ ORDER BY
 END
 $BODY$
   LANGUAGE plpgsql;
-
 
 
 

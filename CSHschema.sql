@@ -127,7 +127,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION findadmissionsbycriteria("searchstring" varchar)
   RETURNS TABLE("admission_id" int4, "admission_type" varchar, "admission_department" varchar, "discharge_date" text, "fee" varchar, "patient" text, "condition" varchar) AS $BODY$
 	DECLARE
-   _searchstring varchar := ('%' ||searchstring|| '%');
+   _searchstring varchar := ('%' ||LOWER(searchstring)|| '%');
 	BEGIN
 	RETURN QUERY
   SELECT A.admissionid AS admission_id,
@@ -144,11 +144,11 @@ FROM
 	LEFT JOIN Patient AS P ON A.Patient = P.PatientID 
 WHERE
 	(
-		LOWER ( A.CONDITION ) LIKE LOWER ( _searchstring ) 
-		OR LOWER ( AT.AdmissionTypeName ) LIKE LOWER ( _searchstring ) 
-		OR LOWER ( D.DeptName ) LIKE LOWER ( _searchstring ) 
-		OR LOWER ( P.FirstName ) LIKE LOWER ( _searchstring ) 
-		OR LOWER ( P.LastName ) LIKE LOWER ( _searchstring ) 
+		LOWER ( A.CONDITION ) LIKE   _searchstring 
+		OR LOWER ( AT.AdmissionTypeName ) LIKE   _searchstring 
+		OR LOWER ( D.DeptName ) LIKE   _searchstring
+		OR LOWER ( P.FirstName ) LIKE   _searchstring  
+		OR LOWER ( P.LastName ) LIKE   _searchstring 
 	) 
 	AND ( A.DischargeDate IS NULL OR A.DischargeDate >= CURRENT_DATE - INTERVAL '2 years' ) 
 ORDER BY

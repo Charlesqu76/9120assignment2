@@ -100,17 +100,17 @@ RETURNS table(
     Admission_id INT,
     Admission_type VARCHAR(20),
     Admission_department VARCHAR(20),
-    Discharge_date Date,
-    Fee Decimal(7, 2),
+    Discharge_date TEXT,
+    Fee VARCHAR,
     Patient TEXT,
     Condition VARCHAR(500)
 ) AS $$
 BEGIN 
     REtURN QUERY
     SELECT ad.AdmissionID as "ID", admit.AdmissionTypeName as "Type", 
-           dept.DeptName as "Department", ad.DischargeDate as "Discharge Date", 
-           ad.Fee as "Fee", concat(pt.FirstName, ' ', pt.LastName) as "Patient", 
-           ad.Condition as "Condition"
+           dept.DeptName as "Department", COALESCE(TO_CHAR(ad.DischargeDate, 'DD-MM-YYYY'), '') as "Discharge Date", 
+           COALESCE(ad.Fee::varchar, '') as "Fee", concat(pt.FirstName, ' ', pt.LastName) as "Patient", 
+           COALESCE(ad.Condition, '') as "Condition"
     FROM Admission ad 
          INNER JOIN AdmissionType admit ON(ad.AdmissionType = admit.AdmissionTypeID) 
          INNER JOIN Department dept ON(ad.department = dept.DeptId)
@@ -125,7 +125,7 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION findadmissionsbycriteria("searchstring" varchar)
-  RETURNS TABLE("admission_id" int4, "admission_type" varchar, "admission_department" varchar, "discharge_date" date, "fee" numeric, "patient" text, "condition" varchar) AS $BODY$
+  RETURNS TABLE("admission_id" int4, "admission_type" varchar, "admission_department" varchar, "discharge_date" text, "fee" varchar, "patient" text, "condition" varchar) AS $BODY$
 	DECLARE
    _searchstring varchar := ('%' ||searchstring|| '%');
 	BEGIN
@@ -133,10 +133,10 @@ CREATE OR REPLACE FUNCTION findadmissionsbycriteria("searchstring" varchar)
   SELECT A.admissionid AS admission_id,
 	AT.AdmissionTypeName AS admission_type,
 	D.DeptName AS admission_department,
-	A.DischargeDate AS discharge_date,
-	A.Fee AS fee,
+	COALESCE(TO_CHAR(A.DischargeDate, 'DD-MM-YYYY'), '') AS discharge_date,
+	COALESCE(A.Fee::varchar, '') AS fee,
 	P.FirstName || P.LastName AS patient,
-	A.CONDITION AS condition 
+	COALESCE(A.CONDITION, '') AS condition 
 FROM
 	Admission
 	AS A LEFT JOIN AdmissionType AS AT ON A.AdmissionType = AT.AdmissionTypeID

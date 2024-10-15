@@ -155,29 +155,29 @@ Update an existing admission
 def updateAdmission(id, type, department, dischargeDate, fee, patient, condition):
     try:
         conn = openConnection()
-        cursor = conn.cursor
+        cursor = conn.cursor()
 
         SQL_query = """
         UPDATE Admission
         SET
-            AdmissionType = (SELECT AdmissionTypeID FROM AdmissionType WHERE LOWER(AdmissionTypeName) = LOWER(%s),
+            AdmissionType = (SELECT AdmissionTypeID FROM AdmissionType WHERE LOWER(AdmissionTypeName) = LOWER(%s)),
             Department = (SELECT DeptID FROM Department WHERE LOWER(DeptNAME) = LOWER(%s)),
             DischargeDate = %s,
             Fee = %s,
-            Patient = %s,
+            Patient = (SELECT PatientID FROM Patient WHERE LOWER(PatientID) = LOWER(%s)),
             Condition = %s
         WHERE AdmissionID = %s
         """
 
-        cursor.execute(SQL_query, (type, department, discharge_date, fee, patient, condition, admission_id))
+        cursor.execute(SQL_query, (type, department, dischargeDate, fee, patient, condition, id))
 
         conn.commit()
 
         if cursor.rowcount > 0:
-            print(f"Admission record with ID {admission_id} updated successfully.")
+            print(f"Admission record with ID {id} updated successfully.")
             return True
         else:
-            print(f"No admission record found with ID {admission_id}.")
+            print(f"No admission record found with ID {id}.")
             return False
 
     except Exception as e:
@@ -186,4 +186,4 @@ def updateAdmission(id, type, department, dischargeDate, fee, patient, condition
     finally:
         cursor.close()
         conn.close()
-    return
+

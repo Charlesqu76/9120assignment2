@@ -107,7 +107,7 @@ See assignment description for search specification
 
 def findAdmissionsByCriteria(searchString):
     try:
-        searchString = searchString.strip()
+        # searchString = searchString.strip()
         conn = openConnection()
         cursor = conn.cursor()
         SQL_query = "SELECT * FROM findadmissionsbycriteria(%s)"
@@ -128,8 +128,6 @@ Add a new addmission
 
 
 def addAdmission(type_, department_, patient_, condition, admin):
-    print('addAdmissionaddAdmission')
-    print(type_, department_, patient_, condition, admin)
     try:
         conn = openConnection()
         cursor = conn.cursor()

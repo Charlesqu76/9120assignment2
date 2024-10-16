@@ -12,24 +12,19 @@ Connect to the database using the connection string
 def openConnection():
     # connection parameters - ENTER YOUR LOGIN AND PASSWORD HERE
 
-    userid = "y24s2c9120_xihe0498"
-    passwd = "Hxy5463060432&"
+    userid = "y24s2c9120_ywan0434"
+    passwd = "wyz19970917.com"
     myHost = "awsprddbs4836.shared.sydney.edu.au"
 
     # Create a connection to the database
     conn = None
     try:
         # Parses the config file and connects using the connect string
-        """
         conn = psycopg2.connect(database=userid,
                                     user=userid,
                                     password=passwd,
                                     host=myHost)
-        """
-        conn = psycopg2.connect(database='9120',
-                                user='charles',
-                                password='charles',
-                                host='43.134.49.254')
+
 
     except psycopg2.Error as sqle:
         print("psycopg2.Error : " + sqle.pgerror)

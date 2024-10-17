@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS Department;
 DROP TABLE IF EXISTS Admission;
 
 
+
 -- del 
 SET DateStyle = 'DMY';
 

@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="330b6555-3137-4522-af5a-d4feb31f72fd" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSHschema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/CSHschema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +31,7 @@
     "Python.main.executor": "Run",
     "Python.routes.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "WYZ",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "/Users/yyds/Documents/GitHub/9120assignment2",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }

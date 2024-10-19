@@ -157,8 +157,8 @@ def updateAdmission(id, type, department, dischargeDate, fee, patient, condition
         SET
             AdmissionType = (SELECT AdmissionTypeID FROM AdmissionType WHERE LOWER(AdmissionTypeName) = LOWER(%s)),
             Department = (SELECT DeptID FROM Department WHERE LOWER(DeptNAME) = LOWER(%s)),
-            DischargeDate = NULLIF(%s, ''),
-            Fee = NULLIF(%s, ''),
+            DischargeDate = %s,
+            Fee = CAST(NULLIF(%s, '') AS numeric),
             Patient = (SELECT PatientID FROM Patient WHERE LOWER(PatientID) = LOWER(%s)),
             Condition = NULLIF(%s, '')
         WHERE AdmissionID = %s

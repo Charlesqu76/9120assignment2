@@ -22,9 +22,9 @@ def openConnection():
         # Parses the config file and connects using the connect string
 
         conn = psycopg2.connect(database=userid,
-                                    user=userid,
-                                    password=passwd,
-                                    host=myHost)
+                                user=userid,
+                                password=passwd,
+                                host=myHost)
 
     except psycopg2.Error as sqle:
         print("psycopg2.Error : " + sqle.pgerror)
@@ -130,7 +130,7 @@ def addAdmission(type_, department_, patient_, condition, admin):
         SELECT * FROM addadmission(%s, %s, %s, %s, %s)
         """
         cursor.execute(SQL_query, (type_, department_,
-                       patient_, condition or None, admin))
+                       patient_, condition, admin))
         conn.commit()
         result = cursor.fetchone()
         return result[0]
@@ -145,6 +145,8 @@ def addAdmission(type_, department_, patient_, condition, admin):
 '''
 Update an existing admission
 '''
+
+
 def updateAdmission(id, type, department, dischargeDate, fee, patient, condition):
     try:
         conn = openConnection()
@@ -155,14 +157,15 @@ def updateAdmission(id, type, department, dischargeDate, fee, patient, condition
         SET
             AdmissionType = (SELECT AdmissionTypeID FROM AdmissionType WHERE LOWER(AdmissionTypeName) = LOWER(%s)),
             Department = (SELECT DeptID FROM Department WHERE LOWER(DeptNAME) = LOWER(%s)),
-            DischargeDate = %s,
-            Fee = %s,
+            DischargeDate = NULLIF(%s, ''),
+            Fee = NULLIF(%s, ''),
             Patient = (SELECT PatientID FROM Patient WHERE LOWER(PatientID) = LOWER(%s)),
-            Condition = %s
+            Condition = NULLIF(%s, '')
         WHERE AdmissionID = %s
         """
 
-        cursor.execute(SQL_query, (type, department, dischargeDate or None, fee or None, patient, condition or None, id))
+        cursor.execute(SQL_query, (type, department,
+                       dischargeDate, fee, patient, condition, id))
 
         conn.commit()
 
@@ -179,4 +182,3 @@ def updateAdmission(id, type, department, dischargeDate, fee, patient, condition
     finally:
         cursor.close()
         conn.close()
-

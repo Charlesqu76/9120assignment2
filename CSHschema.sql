@@ -191,7 +191,7 @@ SELECT AdmissionTypeID INTO type_id FROM AdmissionType WHERE LOWER(type_) = LOWE
 	END IF;
 	
 	INSERT INTO Admission(AdmissionType, Department,Patient ,Administrator, Condition) 
-	VALUES (type_id, department_id, patient_id,admin_, condition_ );
+	VALUES (type_id, department_id, patient_id,admin_, NULLIF(condition_, '') );
 	
 	RETURN TRUE;
 		

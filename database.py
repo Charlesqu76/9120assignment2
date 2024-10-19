@@ -12,8 +12,8 @@ Connect to the database using the connection string
 def openConnection():
     # connection parameters - ENTER YOUR LOGIN AND PASSWORD HERE
 
-    userid = "y24s2c9120_ywan0434"
-    passwd = "wyz19970917.com"
+    userid = "y24s2c9120_zhqu0165"
+    passwd = "Zlaini1314"
     myHost = "awsprddbs4836.shared.sydney.edu.au"
 
     # Create a connection to the database
@@ -130,7 +130,7 @@ def addAdmission(type_, department_, patient_, condition, admin):
         SELECT * FROM addadmission(%s, %s, %s, %s, %s)
         """
         cursor.execute(SQL_query, (type_, department_,
-                       patient_, condition, admin))
+                       patient_, condition or None, admin))
         conn.commit()
         result = cursor.fetchone()
         return result[0]
@@ -162,7 +162,7 @@ def updateAdmission(id, type, department, dischargeDate, fee, patient, condition
         WHERE AdmissionID = %s
         """
 
-        cursor.execute(SQL_query, (type, department, dischargeDate, fee, patient, condition, id))
+        cursor.execute(SQL_query, (type, department, dischargeDate or None, fee or None, patient, condition or None, id))
 
         conn.commit()
 

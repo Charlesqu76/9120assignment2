@@ -12,8 +12,8 @@ Connect to the database using the connection string
 def openConnection():
     # connection parameters - ENTER YOUR LOGIN AND PASSWORD HERE
 
-    userid = "y24s2c9120_zhqu0165"
-    passwd = "Zlaini1314"
+    userid = "y24s2c9120_ywan0434"
+    passwd = "wyz19970917.com"
     myHost = "awsprddbs4836.shared.sydney.edu.au"
 
     # Create a connection to the database
